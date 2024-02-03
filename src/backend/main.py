@@ -15,14 +15,10 @@ app = FastAPI()
 # use to store the transcription data in memory, no database needed
 
 class Transcript(BaseModel):
-    def __init__(self, transcribed_text: str, file_name: str):
-        self.transcribed_text = transcribed_text
-        self.file_name = file_name
-
     transcribed_text: str
     file_name: str
 
-transcript = Transcript("","")
+transcript = Transcript(transcribed_text="",file_name="")
 # Load the Whisper model
 model = whisper.load_model('base.en', device = "cpu")
 
@@ -52,7 +48,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
 async def summarize_text(file_name: str):
     # Load the Ollama model
     llm = Ollama(model="llama2")
-    prompt_template = "Summarize the following text: {transcript.transcribed_text}"
+    prompt_template = f"Summarize the following text: {transcript.transcribed_text}"
     print(transcript.transcribed_text)
     summary = llm.invoke(prompt_template)
     return summary  
