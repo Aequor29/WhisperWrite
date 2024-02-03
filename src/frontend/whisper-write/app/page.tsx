@@ -17,7 +17,7 @@ export default function Home() {
 					websites regardless of your design experience.
 				</h1>
 				<h2 className={subtitle({ class: "mt-4" })}>
-					Beautiful, fast and modern React UI library.
+					woshinidie
 				</h2>
 			</div>
 
