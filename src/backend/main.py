@@ -15,14 +15,10 @@ app = FastAPI()
 # use to store the transcription data in memory, no database needed
 
 class Transcript(BaseModel):
-    def __init__(self, transcribed_text: str, file_name: str):
-        self.transcribed_text = transcribed_text
-        self.file_name = file_name
-
     transcribed_text: str
     file_name: str
 
-transcript = Transcript("","")
+transcript = Transcript(transcribed_text="",file_name="")
 # Load the Whisper model
 model = whisper.load_model('base.en', device = "cpu")
 
