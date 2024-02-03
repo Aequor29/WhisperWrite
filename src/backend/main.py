@@ -29,10 +29,11 @@ model = whisper.load_model('base.en', device = "cpu")
 @app.post("/transcribe/", response_model=Transcript)
 async def transcribe_audio(file: UploadFile = File(...)):
     # Use a more generic temporary file without specifying the extension
-    with tempfile.NamedTemporaryFile(delete=True) as tmp_file:
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         shutil.copyfileobj(file.file, tmp_file)
         tmp_file_path = tmp_file.name
-        tmp_file.seek(0)  # Move to the beginning of the file for reading
+        tmp_file.close()
+        # tmp_file.seek(0)  # Move to the beginning of the file for reading
 
         # Load the audio and perform transcription
         audio = whisper.load_audio(tmp_file_path)
