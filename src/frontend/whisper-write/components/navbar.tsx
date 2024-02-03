@@ -27,7 +27,6 @@ import {
 	SearchIcon,
 } from "@/components/icons";
 
-import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
 	const searchInput = (
@@ -56,8 +55,8 @@ export const Navbar = () => {
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 				<NavbarBrand as="li" className="gap-3 max-w-fit">
 					<NextLink className="flex justify-start items-center gap-1" href="/">
-						<Logo />
-						<p className="font-bold text-inherit">ACME</p>
+						<img src='logo.png' alt="Logo" width="40" height="40"/>
+						<p className="font-bold text-inherit">WhispWrite</p>
 					</NextLink>
 				</NavbarBrand>
 				<ul className="hidden lg:flex gap-4 justify-start ml-2">
