@@ -48,7 +48,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
 async def summarize_text(file_name: str):
     # Load the Ollama model
     llm = Ollama(model="llama2")
-    prompt_template = "Summarize the following text: {transcript.transcribed_text}"
+    prompt_template = f"Summarize the following text: {transcript.transcribed_text}"
     print(transcript.transcribed_text)
     summary = llm.invoke(prompt_template)
     return summary  
