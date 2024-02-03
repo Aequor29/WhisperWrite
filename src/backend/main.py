@@ -1,7 +1,8 @@
-from typing import Union
-import whisper
-from fastapi import FastAPI , File, UploadFile
+from pydantic import BaseModel
+from fastapi import FastAPI , File, HTTPException, UploadFile
+from langchain_community.llms import Ollama
 import shutil
+import whisper
 import tempfile
 import os
 import certifi
@@ -11,21 +12,21 @@ os.environ['SSL_CERT_FILE'] = certifi.where()
 
 app = FastAPI()
 
+# use to store the transcription data in memory, no database needed
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class Transcript(BaseModel):
+    def __init__(self, transcribed_text: str, file_name: str):
+        self.transcribed_text = transcribed_text
+        self.file_name = file_name
 
+    transcribed_text: str
+    file_name: str
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
+transcript = Transcript("","")
 # Load the Whisper model
+model = whisper.load_model('base.en', device = "cpu")
 
-model = whisper.load_model("small", device = "cpu")
-
-@app.post("/transcribe/")
+@app.post("/transcribe/", response_model=Transcript)
 async def transcribe_audio(file: UploadFile = File(...)):
     # Use a more generic temporary file without specifying the extension
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
@@ -37,10 +38,21 @@ async def transcribe_audio(file: UploadFile = File(...)):
         # Load the audio and perform transcription
         audio = whisper.load_audio(tmp_file_path)
         result = model.transcribe(audio)
-        transcibed_text = result.get("text", "transcritpion failed")
+        transcribed_text = result.get("text", "transcription failed")
 
-        os.unlink(tmp_file_path)
+        if transcribed_text == "transcription failed":
+            raise HTTPException(status_code = 400, detail = "Transcription failed")
+        
+        transcript.transcribed_text = transcribed_text
+        transcript.file_name = file.filename
+        
+        return transcript
 
-        return {"transcription": transcibed_text}
-    
-    
+@app.get("/summarize/")
+async def summarize_text(file_name: str):
+    # Load the Ollama model
+    llm = Ollama(model="llama2")
+    prompt_template = "Summarize the following text: {transcript.transcribed_text}"
+    print(transcript.transcribed_text)
+    summary = llm.invoke(prompt_template)
+    return summary  
