@@ -2,18 +2,19 @@ from langchain_community.llms import Ollama
 from langchain.prompts import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.docstore.document import Document
 
 def map_reduce(transcribed_text):
-    llm = Ollama(model="llama2")
+    llm = Ollama(model="llama2:13b")
     map_prompt_template = """
-                        Write a summary of this chunk of text that includes the main points and any important details.
+                        Write a detailed summary of this chunk of text that includes the main points and as many as important details as you can.
                         {text}
                         """
 
     map_prompt = PromptTemplate(template=map_prompt_template, input_variables=["text"])
 
     combine_prompt_template = """
-                        Write a concise summary of the following text delimited by triple backquotes.
+                        Write a detailed summary of the following text delimited by triple backquotes.
                         Return your response in bullet points which covers the key points of the text.
                         ```{text}```
                         BULLET POINT SUMMARY:
@@ -35,9 +36,8 @@ def map_reduce(transcribed_text):
         chunk_size=1000, chunk_overlap=0
     )
     split_text = text_splitter.split_documents(transcribed_text)
-    print(map_reduce_chain({"input_documents": split_text}))
+    docs = [Document(page_content=t) for t in split_text]
 
-with open('D:\OneDrive\OneDrive - Davidson College\WhisperWrite\test\test_summary.txt', 'r') as file:
-    contents = file.read()
+    result = map_reduce_chain.invoke(docs)
 
-map_reduce(contents)
+    return result['output_text']
