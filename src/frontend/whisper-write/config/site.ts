@@ -47,7 +47,7 @@ export const siteConfig = {
 		},
 	],
 	links: {
-		github: "https://github.com/Aequor29/WhisperWrite.git",
+		github: "https://github.com/Aequor29/WhisperWrite",
 		docs: "https://baidu.com",
     sponsor: "https://patreon.com/jrgarciadev"
 	},
