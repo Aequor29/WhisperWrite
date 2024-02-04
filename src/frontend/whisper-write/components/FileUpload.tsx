@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import {Button} from "@nextui-org/button";
 import { Asap_Condensed } from 'next/font/google';
 
+interface FileUploadProps {
+  onTranscribe: (transcription: string) => void;
+  onProcessing: (processing: boolean) => void;
+}
 // const styles = {
 //   container: {
 //     display: 'flex',
@@ -70,7 +74,7 @@ const styles = {
 
 
 
-const FileUpload: React.FC = () => {
+const FileUpload: React.FC<FileUploadProps> = ({ onTranscribe, onProcessing }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [transcription, setTranscription] = useState<string>('');
 
@@ -79,6 +83,7 @@ const FileUpload: React.FC = () => {
       const file = event.target.files[0];
       if (file.type === 'audio/mpeg' || file.type === 'audio/x-m4a' || file.type === 'video/mp4') {
         setSelectedFile(file);
+        alert('File is ready to be uploaded.');
       } else {
         alert('Please select an mp3, m4a, or mp4 file.');
       }
@@ -88,6 +93,7 @@ const FileUpload: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (selectedFile) {
+      onProcessing(true);
       const formData = new FormData();
       formData.append('file', selectedFile);
 
@@ -102,10 +108,12 @@ const FileUpload: React.FC = () => {
         }
 
         const data = await response.json();
-        setTranscription(data.transcribedText); // Assuming the response contains a field 'transcribedText'
-        console.log(data);
+        onTranscribe(data.transcribed_text);
+        // setTranscription(data.transcribed_text); // Assuming the response contains a field 'transcribedText'
+        // console.log(data);
       } catch (error) {
         console.error('There was an error uploading the file', error);
+        onProcessing(false);
       }
       // Here you can implement the code to send the formData to your server
       // For example:
@@ -116,7 +124,7 @@ const FileUpload: React.FC = () => {
       // const data = await response.json();
       // console.log(data);
 
-      alert('File is ready to be uploaded.');
+      
     }
   };
 
