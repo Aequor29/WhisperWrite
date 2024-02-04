@@ -2,6 +2,7 @@ from langchain_community.llms import Ollama
 from langchain.prompts import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import CharacterTextSplitter
+from langchain.docstore.document import Document
 
 def map_reduce(transcribed_text):
     llm = Ollama(model="llama2")
@@ -35,4 +36,8 @@ def map_reduce(transcribed_text):
         chunk_size=1000, chunk_overlap=0
     )
     split_text = text_splitter.split_documents(transcribed_text)
-    print(map_reduce_chain({"input_documents": split_text}))
+    docs = [Document(page_content=t) for t in split_text]
+
+    result = map_reduce_chain.invoke(docs)
+
+    return result['output_text']
