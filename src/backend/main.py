@@ -35,10 +35,10 @@ class Transcript(BaseModel):
 
 transcript = Transcript(transcribed_text="",file_name="")
 # Load the Whisper model
-model = whisper.load_model('base.en', device = "cpu")
 
 @app.post("/transcribe/", response_model=Transcript)
 async def transcribe_audio(file: UploadFile = File(...)):
+    model = whisper.load_model('base.en', device = "cpu")
     # Use a more generic temporary file without specifying the extension
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         shutil.copyfileobj(file.file, tmp_file)
