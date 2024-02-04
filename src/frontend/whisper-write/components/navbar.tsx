@@ -1,3 +1,4 @@
+'use client';
 import {
 	Navbar as NextUINavbar,
 	NavbarContent,
@@ -47,11 +48,18 @@ export const Navbar = () => {
 	// 	/>
 	// );
 
+	const handleLogoClick = (e) => {
+		if (window.location.pathname === '/') {
+		  e.preventDefault(); // Prevent the default Next.js link behavior
+		  window.location.reload(); // Reload the current page
+		}
+	  };
+
 	return (
 		<NextUINavbar maxWidth="xl" position="sticky">
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 				<NavbarBrand as="li" className="gap-3 max-w-fit">
-					<NextLink className="flex justify-start items-center gap-1" href="/">
+					<NextLink onClick={handleLogoClick} className="flex justify-start items-center gap-1" href="/">
 						<img src='logo.png' alt="Logo" width="40" height="40"/>
 						<p className="font-bold text-inherit">WhispWrite</p>
 					</NextLink>
