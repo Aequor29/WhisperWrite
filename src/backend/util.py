@@ -40,6 +40,5 @@ def map_reduce(transcribed_text):
     docs = [Document(page_content=t) for t in split_text]
 
     result = map_reduce_chain.invoke(docs)
-    print (result['output_text'])
 
     return result['output_text']
