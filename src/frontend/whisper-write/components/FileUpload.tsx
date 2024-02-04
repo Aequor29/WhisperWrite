@@ -40,7 +40,7 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: "40px", // Increased padding
+    padding: "20px", // Increased padding
     border: "2px dashed #007BFF",
     borderRadius: "10px", // Slightly larger border radius
     marginTop: "20px",
@@ -49,11 +49,29 @@ const styles = {
     minHeight: "200px", // Minimum height to make it look larger
     boxSizing: "border-box",
   },
-  input: {
-    margin: "10px 0",
-    fontSize: "1.25rem", // Larger font size for better visibility
-    padding: "10px", // Larger padding for better click/tap area
-    cursor: "pointer", // Cursor changes to pointer when hovering over input
+  uploadArea: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "40px",
+    backgroundColor: "transparent",
+    color: "#007BFF",
+    borderradius: "5px",
+    cursor: "pointer",
+  },
+  // input: {
+  //   margin: "10px 0",
+  //   fontSize: "1.25rem", // Larger font size for better visibility
+  //   padding: "30px", // Larger padding for better click/tap area
+  //   cursor: "pointer", // Cursor changes to pointer when hovering over input
+  // },
+  fileInput: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    cursor: "pointer",
+    opacity: 0,
   },
   fileInfo: {
     marginTop: "10px",
@@ -124,16 +142,20 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div style={styles.container as React.CSSProperties}>
       <form onSubmit={handleSubmit} style={{ textAlign: "center" }}>
-        <input
-          type="file"
-          onChange={handleFileChange}
-          accept=".mp3,.m4a,.mp4, .wav"
-          style={styles.input}
-        />
+        <div style={styles.uploadArea}>
+          Click to choose file
+          <input
+            type="file"
+            onChange={handleFileChange}
+            accept=".mp3,.m4a,.mp4, .wav"
+            style={styles.fileInput}
+          />
+        </div>
         <Button
           color="primary"
           variant="ghost"
           type="submit"
+          style={{ marginTop: "10px" }}
         >
           Upload File
         </Button>
