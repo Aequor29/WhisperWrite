@@ -1,7 +1,10 @@
-from typing import Union
-import whisper
-from fastapi import FastAPI , File, UploadFile
+from pydantic import BaseModel
+from fastapi import FastAPI , File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from langchain_community.llms import Ollama
+import util
 import shutil
+import whisper
 import tempfile
 import os
 import certifi
@@ -11,33 +14,53 @@ os.environ['SSL_CERT_FILE'] = certifi.where()
 
 app = FastAPI()
 
+# Allow CORS
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# use to store the transcription data in memory, no database needed
 
+class Transcript(BaseModel):
+    transcribed_text: str
+    file_name: str
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
+transcript = Transcript(transcribed_text="",file_name="")
 # Load the Whisper model
 
-model = whisper.load_model("small", device = "cpu")
-
-@app.post("/transcribe/")
+@app.post("/transcribe/", response_model=Transcript)
 async def transcribe_audio(file: UploadFile = File(...)):
+    model = whisper.load_model('base.en', device = "cpu")
     # Use a more generic temporary file without specifying the extension
-    with tempfile.NamedTemporaryFile(delete=True) as tmp_file:
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         shutil.copyfileobj(file.file, tmp_file)
         tmp_file_path = tmp_file.name
-        tmp_file.seek(0)  # Move to the beginning of the file for reading
+        tmp_file.close()
+        # tmp_file.seek(0)  # Move to the beginning of the file for reading
 
         # Load the audio and perform transcription
         audio = whisper.load_audio(tmp_file_path)
         result = model.transcribe(audio)
-        transcibed_text = result.get("text", "transcritpion failed")
+        transcribed_text = result.get("text", "transcription failed")
 
-        return {"transcription": transcibed_text}
-    
-    
+        if transcribed_text == "transcription failed":
+            raise HTTPException(status_code = 400, detail = "Transcription failed")
+        
+        transcript.transcribed_text = transcribed_text
+        transcript.file_name = file.filename
+        
+        return transcript
+
+@app.get("/summarize/")
+async def summarize_text():
+    # Process the transcribed text into notes
+    summary = util.map_reduce(transcript.transcribed_text)
+    return summary
