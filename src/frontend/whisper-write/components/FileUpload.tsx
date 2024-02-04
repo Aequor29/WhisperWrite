@@ -81,11 +81,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ onTranscribe, onProcessing }) =
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      if (file.type === 'audio/mpeg' || file.type === 'audio/x-m4a' || file.type === 'video/mp4') {
+      if (file.type === 'audio/mpeg' || file.type === 'audio/x-m4a' || file.type === 'video/mp4'||file.type=== 'audio/wav') {
         setSelectedFile(file);
         alert('File is ready to be uploaded.');
       } else {
-        alert('Please select an mp3, m4a, or mp4 file.');
+        alert('Please select an mp3, m4a, mp4 or wav file.');
       }
     }
   };
@@ -134,7 +134,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onTranscribe, onProcessing }) =
         <input 
           type="file" 
           onChange={handleFileChange} 
-          accept=".mp3,.m4a,.mp4" 
+          accept=".mp3,.m4a,.mp4, .wav" 
           style={styles.input}
         />
         <Button 
