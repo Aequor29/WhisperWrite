@@ -55,16 +55,6 @@ const styles = {
     padding: "10px", // Larger padding for better click/tap area
     cursor: "pointer", // Cursor changes to pointer when hovering over input
   },
-  button: {
-    cursor: "pointer",
-    padding: "15px 30px", // Larger button size
-    backgroundColor: "#007BFF",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "18px", // Larger font size for the button
-    marginTop: "20px", // Add some space above the button
-  },
   fileInfo: {
     marginTop: "10px",
     fontSize: "1.25rem", // Larger font size for file info
@@ -143,7 +133,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
         <Button
           color="primary"
           variant="ghost"
-          style={styles.button}
           type="submit"
         >
           Upload File
