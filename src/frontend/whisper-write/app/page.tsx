@@ -66,13 +66,14 @@ export default function Home() {
       const response = await fetch("http://127.0.0.1:8000/summarize", {
         method: "GET",
       });
-
+      setIsProcessing(true);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
 
       const data = await response.json();
-      setNote(data); // Assume the backend sends back a "note" field
+      setIsProcessing(false);
+      setNote(data); 
       setShowGetNoteButton(false); // Hide the GETNOTE button
     } catch (error) {
       console.error("There was an error fetching the note", error);
@@ -88,11 +89,14 @@ export default function Home() {
           onProcessing={handleProcessing}
         />
       )}
-      {transcription && !note && (
+      {!isProcessing &&transcription && !note && (
         <TranscriptionDisplay transcription={transcription} />
       )}
-      {showGetNoteButton && !note && (
-        <Button onClick={handleGetNote}>GETNOTE</Button>
+      {!isProcessing&&showGetNoteButton && !note && (
+        <Button 
+        variant="ghost"
+        color="success"
+        onClick={handleGetNote}>GETNOTE</Button>
       )}
       {note && <NoteDisplay note={note} />}
     </section>
