@@ -46,26 +46,67 @@ import { Spinner } from '@nextui-org/spinner';
 export default function Home() {
   const [transcription, setTranscription] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [note, setNote] = useState('');
+  const [showGetNoteButton, setShowGetNoteButton] = useState(false);
 
   const handleTranscription = (newTranscription: string) => {
     setTranscription(newTranscription);
     setIsProcessing(false);
+    setShowGetNoteButton(true);
   };
 
   const handleProcessing = (processing: boolean) => {
     setIsProcessing(processing);
   };
 
+  const handleGetNote = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/summarize', {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setNote(data.note); // Assume the backend sends back a "note" field
+      setShowGetNoteButton(false); // Hide the GETNOTE button
+    } catch (error) {
+      console.error('There was an error fetching the note', error);
+    }
+  };
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      {isProcessing ? (
+      {isProcessing && (
         <Spinner label="Processing..." color="warning" />
-      ) : transcription ? (
-        <TranscriptionDisplay transcription={transcription} />
-      ) : (
+      )}
+      {!isProcessing && !transcription && (
         <FileUpload onTranscribe={handleTranscription} onProcessing={handleProcessing} />
+      )}
+      {transcription && !note && (
+        <TranscriptionDisplay transcription={transcription} />
+      )}
+      {showGetNoteButton && !note && (
+        <button
+        onClick={handleGetNote}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1rem',
+          color: 'white',
+          background: 'blue',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        GETNOTE
+      </button>
+      )}
+      {note && (
+        <NoteDisplay note={note} />
       )}
     </section>
   );
 }
-
