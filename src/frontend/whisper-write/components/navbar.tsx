@@ -48,12 +48,12 @@ export const Navbar = () => {
 	// 	/>
 	// );
 
-	const handleLogoClick = (e) => {
+	const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		if (window.location.pathname === '/') {
-		  e.preventDefault(); // Prevent the default Next.js link behavior
-		  window.location.reload(); // Reload the current page
+			e.preventDefault(); // Prevent the default Next.js link behavior
+			window.location.reload(); // Reload the current page
 		}
-	  };
+	};
 
 	return (
 		<NextUINavbar maxWidth="xl" position="sticky">
