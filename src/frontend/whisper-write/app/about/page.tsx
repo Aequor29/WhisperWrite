@@ -12,12 +12,12 @@ import { title, subtitle } from "@/components/primitives";
 export default function AboutPage() {
     return (
         <div className="px-4 py-8">
-            <h1 className={title()}>About WhispWrite</h1>
+            <h1 className={title()}>About WhisperWrite</h1>
 
             <section className="mt-6">
                 <h2 className={subtitle()}>Inspiration</h2>
                 <p>
-                    WhispWrite was inspired by the need for a seamless, intuitive platform to convert video or audio to text, enabling easier content creation, note-taking, and data analysis. Our goal was to create a user-friendly interface that leverages state-of-the-art machine learning models to deliver accurate transcriptions and provide an easy read summary.
+                    WhisperWrite was inspired by the need for a seamless, intuitive platform to convert video or audio to text, enabling easier content creation, note-taking, and data analysis. Our goal was to create a user-friendly interface that leverages state-of-the-art machine learning models to deliver accurate transcriptions and provide an easy read summary.
                 </p>
             </section>
 
@@ -32,7 +32,7 @@ export default function AboutPage() {
             <section className="mt-6">
                 <h2 className={subtitle()}>Future Work</h2>
                 <p>
-                    We are constantly working to improve WhispWrite. Future updates include support for more languages, real-time transcription, and integration with third-party applications to enhance your productivity and workflow.
+                    We are constantly working to improve WhisperWrite. Future updates include support for more languages, real-time transcription, and integration with third-party applications to enhance your productivity and workflow.
                 </p>
             </section>
 

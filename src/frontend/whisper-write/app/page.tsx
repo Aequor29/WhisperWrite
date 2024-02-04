@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <h2 className={title()}>Whisper Write</h2>
+      <h2 className={title()}>WhisperWrite</h2>
       <h2 className={subtitle({ class: "mt-4" })}>
         Your AI transcipter and Note Taker
       </h2>
