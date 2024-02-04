@@ -36,8 +36,3 @@ def map_reduce(transcribed_text):
     )
     split_text = text_splitter.split_documents(transcribed_text)
     print(map_reduce_chain({"input_documents": split_text}))
-
-with open('D:\OneDrive\OneDrive - Davidson College\WhisperWrite\test\test_summary.txt', 'r') as file:
-    contents = file.read()
-
-map_reduce(contents)
