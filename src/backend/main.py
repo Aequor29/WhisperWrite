@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from fastapi import FastAPI , File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_community.llms import Ollama
 import shutil
 import whisper
@@ -12,6 +13,19 @@ os.environ['SSL_CERT_FILE'] = certifi.where()
 
 app = FastAPI()
 
+# Allow CORS
+origins = [
+    "http://localhost",
+    "http://localhost:3001",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # use to store the transcription data in memory, no database needed
 
 class Transcript(BaseModel):
