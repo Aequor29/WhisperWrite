@@ -16,6 +16,7 @@ def map_reduce(transcribed_text):
     combine_prompt_template = """
                         Write a detailed summary of the following text delimited by triple backquotes.
                         Return your response in bullet points which covers the key points of the text.
+                        Separate each bullet point with a new line.
                         ```{text}```
                         BULLET POINT SUMMARY:
                         """
@@ -35,9 +36,10 @@ def map_reduce(transcribed_text):
     text_splitter = CharacterTextSplitter.from_tiktoken_encoder(
         chunk_size=1000, chunk_overlap=0
     )
-    split_text = text_splitter.split_documents(transcribed_text)
+    split_text = text_splitter.split_text(transcribed_text)
     docs = [Document(page_content=t) for t in split_text]
 
     result = map_reduce_chain.invoke(docs)
+    print (result['output_text'])
 
     return result['output_text']

@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI , File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_community.llms import Ollama
+import util
 import shutil
 import whisper
 import tempfile
@@ -16,7 +17,7 @@ app = FastAPI()
 # Allow CORS
 origins = [
     "http://localhost",
-    "http://localhost:3001",
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
@@ -59,10 +60,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         return transcript
 
 @app.get("/summarize/")
-async def summarize_text(file_name: str):
-    # Load the Ollama model
-    llm = Ollama(model="llama2")
-    prompt_template = f"Summarize the following text: {transcript.transcribed_text}"
-    print(transcript.transcribed_text)
-    summary = llm.invoke(prompt_template)
-    return summary  
+async def summarize_text():
+    # Process the transcribed text into notes
+    summary = util.map_reduce(transcript.transcribed_text)
+    return summary
