@@ -28,7 +28,7 @@ Before you begin, make sure you have the following installed on your machine:
 2. **Navigate to the project directory:**
 
     ```bash
-    cd WhisperWrite
+    cd WhisperWrite/src
     ```
 
 ### Setting Up the Frontend
@@ -36,14 +36,14 @@ Before you begin, make sure you have the following installed on your machine:
 1. **Install dependencies:**
 
     ```bash
-    cd frontend
+    cd frontend/whisper-write
     npm install
     ```
 
 2. **Start the development server:**
 
     ```bash
-    npm start
+    npm run dev
     ```
 
 ### Setting Up the Backend
@@ -69,7 +69,7 @@ Before you begin, make sure you have the following installed on your machine:
 4. **Start the backend server:**
 
     ```bash
-    python app.py
+    uvicorn main:app --reload
     ```
 
 ### Notes
