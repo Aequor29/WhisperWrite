@@ -1,5 +1,7 @@
 # Welcome to WhisperWrite
 
+![image](https://github.com/user-attachments/assets/51a09483-822b-4034-aa95-bd5c40db3383)
+
 WhisperWrite is a powerful tool designed to process audio recordings of any length, surpassing the typical limitations of online APIs. Our tool has been tested with audio files as long as 2 hours, and it performs exceptionally well. Additionally, WhisperWrite can take notes from the audio and provide you with a summary highlighting the main points.
 
 For more information about the project, visit our [Devpost page](https://devpost.com/software/whispwrite).
